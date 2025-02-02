@@ -1,137 +1,140 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <style>
-    body {
-      margin: 0;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background-color: black;
-      color: white;
-      font-family: "Arial Narrow", sans-serif;
-      overflow: hidden;
-
-      transition: background-color 1s ease-in-out, color 1s ease-in-out
-    }
-
-    body.newday {
-      background-color: white;
-      color: black;
-    }
-
-    .container {
-      text-align: center;
-      font-weight: bold;
-    }
-
-    #title {
-      font-size: 2.5rem;
-      /* margin-bottom: 1rem; */
-    }
-
-    #subtitle {
-      font-size: 4rem;
-      margin-bottom: 1rem;
-    }
-
-    #remaining {
-      font-size: 1.8rem;
-    }
-
-    input {
-      position: absolute;
-      top: 20px;
-      left: 20px;
-      color: white;
-      background: black;
-      border: 1px solid gray;
-    }
-
-    input.hidden {
-      display: none;
-    }
-  </style>
-</head>
-<body>
-  <input type="date" id="targetDate" onchange="updateTargetDate()">
-  <div class="container">
-    <div id="title">Dawn of</div>
-    <div id="subtitle">The First Day</div>
-    <div id="remaining">-72 Hours Remaining</div>
-  </div>
-
-  <script>
-    const $ = document.querySelector.bind(document);
-
-    let targetDate = new Date();
-    targetDate.setDate(targetDate.getDate() + 3);
-
-    $('#targetDate').value = targetDate.toISOString().slice(0, 10);
-
-    if (location.hash)
-      $('#targetDate').classList.add("hidden");
-
-    function handleHash() {
-      if (location.hash)
-        $('#targetDate').value = location.hash.substring(1);
-      updateTargetDate();
-    }
-
-    function getTimeOfDay() {
-      const hour = new Date().getHours();
-      
-      if (hour >= 6 && hour < 8) return "Dawn";
-      if (hour >= 8 && hour < 12) return "Morning";
-      if (hour >= 12 && hour < 17) return "Day";
-      if (hour >= 17 && hour < 20) return "Dusk";
-      if (hour >= 20 || hour < 6) return "Night";
-    }
-
-    function updateTargetDate() {
-      const value = $('#targetDate').value;
-      location.hash = value;
-      targetDate = new Date(value).setHours(6);
-      updateCountdown();
-    }
-
-    function updateCountdown() {
-      const now = new Date();
-      const timeRemaining = targetDate - now;
-      const timeOfDay = getTimeOfDay();
-      
-      if (timeRemaining <= 0) {
-        $("body").classList.add("newday");
-
-        $('#title').textContent = 'Dawn of a';
-        $('#subtitle').textContent = 'New Day';
-        $('#remaining').textContent = '';
-        return;
+  <head>
+    <style>
+      @font-face {
+        font-family: "Arial Narrow";
+        src: local("Arial Narrow Bold"),
+          url("ArialNarrow-Bold.ttf") format("truetype");
+        font-weight: bold;
       }
 
-      $("body").classList.remove("newday");
+      body {
+        margin: 0;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: black;
+        color: white;
+        font-family: "Arial Narrow", Arial, sans-serif;
+        overflow: hidden;
 
-      const daysRemaining = Math.ceil(timeRemaining / (1000 * 60 * 60 * 24));
-      const hoursRemaining = Math.ceil(timeRemaining / (1000 * 60 * 60));
-      
-      let dayText = "First";
-      if (daysRemaining == 2)
-        dayText = 'Second';
-      else if (daysRemaining == 1)
-        dayText = 'Final';
+        transition: background-color 1s ease-in-out, color 1s ease-in-out;
+      }
 
-      // Update all text immediately
-      $('#title').textContent = `${timeOfDay} of`;
-      $('#subtitle').textContent = `The ${dayText} Day`;
-      $('#remaining').textContent = `-${hoursRemaining} Hours Remain-`;
-    }
+      body.newday {
+        background-color: white;
+        color: black;
+      }
 
-    handleHash();
-    addEventListener("hashchange", handleHash);
+      .container {
+        text-align: center;
+        font-weight: bold;
+      }
 
-    updateTargetDate();
-    setInterval(updateCountdown, 1000);
-  </script>
-</body>
+      #title {
+        font-size: 2.5rem;
+        /* margin-bottom: 1rem; */
+      }
+
+      #subtitle {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+      }
+
+      #remaining {
+        font-size: 2rem;
+      }
+
+      input {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        color: white;
+        background: black;
+        border: 1px solid gray;
+      }
+
+      input.hidden {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <input type="date" id="targetDate" onchange="updateTargetDate()" />
+    <div class="container">
+      <div id="title">Dawn of</div>
+      <div id="subtitle">The First Day</div>
+      <div id="remaining">-72 Hours Remaining</div>
+    </div>
+
+    <script>
+      const $ = document.querySelector.bind(document);
+
+      let targetDate = new Date();
+      targetDate.setDate(targetDate.getDate() + 3);
+
+      $("#targetDate").value = targetDate.toISOString().slice(0, 10);
+
+      if (location.hash) $("#targetDate").classList.add("hidden");
+
+      function handleHash() {
+        if (location.hash) $("#targetDate").value = location.hash.substring(1);
+        updateTargetDate();
+      }
+
+      function getTimeOfDay() {
+        const hour = new Date().getHours();
+
+        if (hour >= 6 && hour < 8) return "Dawn";
+        if (hour >= 8 && hour < 12) return "Morning";
+        if (hour >= 12 && hour < 17) return "Day";
+        if (hour >= 17 && hour < 20) return "Dusk";
+        if (hour >= 20 || hour < 6) return "Night";
+      }
+
+      function updateTargetDate() {
+        const value = $("#targetDate").value;
+        location.hash = value;
+        targetDate = new Date(value).setHours(6);
+        updateCountdown();
+      }
+
+      function updateCountdown() {
+        const now = new Date();
+        const timeRemaining = targetDate - now;
+        const timeOfDay = getTimeOfDay();
+
+        if (timeRemaining <= 0) {
+          $("body").classList.add("newday");
+
+          $("#title").textContent = "Dawn of a";
+          $("#subtitle").textContent = "New Day";
+          $("#remaining").textContent = "";
+          return;
+        }
+
+        $("body").classList.remove("newday");
+
+        const daysRemaining = Math.ceil(timeRemaining / (1000 * 60 * 60 * 24));
+        const hoursRemaining = Math.ceil(timeRemaining / (1000 * 60 * 60));
+
+        let dayText = "First";
+        if (daysRemaining == 2) dayText = "Second";
+        else if (daysRemaining == 1) dayText = "Final";
+
+        // Update all text immediately
+        $("#title").textContent = `${timeOfDay} of`;
+        $("#subtitle").textContent = `The ${dayText} Day`;
+        $("#remaining").textContent = `-${hoursRemaining} Hours Remain-`;
+      }
+
+      handleHash();
+      addEventListener("hashchange", handleHash);
+
+      updateTargetDate();
+      setInterval(updateCountdown, 1000);
+    </script>
+  </body>
 </html>
