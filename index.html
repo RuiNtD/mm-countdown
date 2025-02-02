@@ -83,8 +83,6 @@
       updateTargetDate();
     }
 
-    addEventListener("hashchange", handleHash);
-
     function getTimeOfDay() {
       const hour = new Date().getHours();
       
@@ -132,6 +130,9 @@
       $('#subtitle').textContent = `The ${dayText} Day`;
       $('#remaining').textContent = `-${hoursRemaining} Hours Remain-`;
     }
+
+    handleHash();
+    addEventListener("hashchange", handleHash);
 
     updateTargetDate();
     setInterval(updateCountdown, 1000);
