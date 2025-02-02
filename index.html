@@ -75,7 +75,10 @@
       let targetDate = new Date();
       targetDate.setDate(targetDate.getDate() + 3);
 
-      $("#targetDate").value = targetDate.toISOString().slice(0, 10);
+      let dateStr = targetDate.getFullYear();
+      dateStr += "-" + `${targetDate.getMonth() + 1}`.padStart(2, "0");
+      dateStr += "-" + `${targetDate.getDate()}`.padStart(2, "0");
+      $("#targetDate").value = dateStr;
 
       if (location.hash) $("#targetDate").classList.add("hidden");
 
@@ -97,7 +100,8 @@
       function updateTargetDate() {
         const value = $("#targetDate").value;
         location.hash = value;
-        targetDate = new Date(value).setHours(6);
+
+        targetDate = new Date(`${value}T06:00:00`);
         updateCountdown();
       }
 
@@ -109,8 +113,8 @@
         if (timeRemaining <= 0) {
           $("body").classList.add("newday");
 
-          $("#title").textContent = "Dawn of a";
-          $("#subtitle").textContent = "New Day";
+          $("#title").textContent = `${timeOfDay} of`;
+          $("#subtitle").textContent = "A New Day";
           $("#remaining").textContent = "";
           return;
         }
